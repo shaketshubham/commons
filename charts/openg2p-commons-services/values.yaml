@@ -4,7 +4,7 @@ global:
   # of a hardcoded one that has to be overridden every time.
   # NOTE: every consumer renders this with `tpl` — keep it that way, otherwise
   # the {{ }} here is emitted literally into hostnames.
-  baseDomain: '{{ .Release.Namespace }}.openg2p.org'
+  baseDomain: '{{ .Release.Namespace }}.shaketopeng2p.dedyn.io'
   # Derived from baseDomain. Override only when using an external Keycloak.
   keycloakBaseUrl: 'https://keycloak.{{ tpl .Values.global.baseDomain $ }}'
   # Internal (in-cluster) URL for pod-to-Keycloak communication (HTTP, no TLS).
@@ -118,6 +118,7 @@ masterData:
     nameOverride: md-kc-init
   enabled: true
   global:
+    envDomain: '{{ tpl .Values.global.baseDomain $ }}'
     masterDataHostname: 'master-data.{{ tpl .Values.global.baseDomain $ }}'
     # Plain DB names (no release-name prefix). Only one instance per env.
     masterDataDB: master_data
@@ -883,6 +884,7 @@ openg2p-iam-service:
         cpu: 50m
         memory: 256Mi
   global:
+    envDomain: '{{ tpl .Values.global.baseDomain $ }}'
     iamHostname: '{{ tpl .Values.global.iamHostname $ }}'
     postgresqlHost: '{{ tpl .Values.global.postgresqlHost $ }}'
     # Plain DB names (no release-name prefix). Only one instance per env.
